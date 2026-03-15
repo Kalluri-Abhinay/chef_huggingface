@@ -15,7 +15,7 @@ export default async function handler(req, res) {
       messages: [
         {
           role: "user",
-          content: `Create a recipe using: ${ingredients.join(", ")}`,
+          content: `Create a detailed recipe using these ingredients: ${ingredients.join(", ")}`,
         },
       ],
     });
