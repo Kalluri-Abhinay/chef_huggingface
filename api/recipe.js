@@ -5,14 +5,11 @@ export default async function handler(req, res) {
 
   const { ingredients } = req.body;
 
-  const systemPrompt = `
-You are a recipe generator...
+  const prompt = `
+System: You are a recipe generator. Create a detailed recipe using the given ingredients.
+User: Ingredients: ${ingredients.join(", ")}
+Assistant:
 `;
-
-  const messages = [
-    { role: "system", content: systemPrompt },
-    { role: "user", content: `Ingredients: ${ingredients.join(", ")}` }
-  ];
 
   try {
     const response = await fetch(
@@ -23,13 +20,26 @@ You are a recipe generator...
           "Content-Type": "application/json",
           Authorization: `Bearer ${process.env.HF_ACCESS_TOKEN}`,
         },
-        body: JSON.stringify({ messages }),
+        body: JSON.stringify({ inputs: prompt }),
       }
     );
 
-    const data = await response.json();
-    return res.status(200).json({ recipe: data });
+    const text = await response.text();
+
+    try {
+      const data = JSON.parse(text);
+      return res.status(200).json({ recipe: data });
+    } catch (err) {
+      return res.status(500).json({
+        error: "Invalid JSON from HuggingFace",
+        details: text
+      });
+    }
+
   } catch (err) {
-    return res.status(500).json({ error: "Server error", details: err.message });
+    return res.status(500).json({
+      error: "Server error",
+      details: err.message
+    });
   }
 }
