@@ -26,10 +26,12 @@ Assistant:
 
     const text = await response.text();
 
+    // Try to parse JSON
     try {
       const data = JSON.parse(text);
       return res.status(200).json({ recipe: data });
     } catch (err) {
+      // Return the raw HF error so we can see what's wrong
       return res.status(500).json({
         error: "Invalid JSON from HuggingFace",
         details: text
@@ -38,7 +40,7 @@ Assistant:
 
   } catch (err) {
     return res.status(500).json({
-      error: "Server error",
+      error: "Request failed",
       details: err.message
     });
   }
