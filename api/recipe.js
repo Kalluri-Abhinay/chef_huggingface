@@ -16,7 +16,7 @@ You are a recipe generator...
 
   try {
     const response = await fetch(
-      "https://api-inference.huggingface.co/models/deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B",
+      "https://router.huggingface.co/hf-inference/models/deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B",
       {
         method: "POST",
         headers: {
