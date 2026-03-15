@@ -1,6 +1,8 @@
 import { InferenceClient } from "@huggingface/inference";
 
 export default async function handler(req, res) {
+  console.log("HF_TOKEN:", process.env.HF_TOKEN);
+
   if (req.method !== "POST") {
     return res.status(405).json({ error: "Method not allowed" });
   }
